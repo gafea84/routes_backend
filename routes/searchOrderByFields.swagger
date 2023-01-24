@@ -1,0 +1,54 @@
+/**
+ * @openapi
+ *
+ *components:
+ *  schemas:
+ *    searchOrderByFields:
+ *      title: SearchOrderByFields
+ *      description: Criterios para filtrar (se aplica un and si hay más de uno) y ordenar los resultados de la búsqueda.
+ *      type: object
+ *      properties:
+ *        searchConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/searchCondition'
+ *          description: Condiciones de búsqueda
+ *        orderByConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/orderByCondition'
+ *          description: Criterios de ordenación (se hay más de uno, se aplican por el orden indicado).
+ *    searchCondition:
+ *      title: SearchCondition
+ *      description: Criterio de búsqueda
+ *      type: object
+ *      properties:
+ *        column:
+ *          type: string
+ *          description: Nombre de la columna (cuidado con las mayúsculas-minúsculas debe coincidir con lo que hay en la base de datos)
+ *          example: email 
+ *        operator:
+ *          type: string
+ *          enum: ['=', '>', '>=', '<', '<=', '<>', 'like']
+ *          description: Operador utilizado en la comparación (valores posibles '=', '>', '>=', '<', '<=', '<>', 'like'). 
+ *          example: like 
+ *        value:
+ *          type: string
+ *          description: Valor usado en la comparación.
+ *          example: e*
+ *    orderByCondition:
+ *      title: OrderByCondition
+ *      description: Criterio de ordenación
+ *      type: object
+ *      properties:
+ *        column:
+ *          type: string
+ *          description: Nombre de la columna (cuidado con las mayúsculas-minúsculas debe coincidir con lo que hay en la base de datos)
+ *          example: id 
+ *        order:
+ *          type: string
+ *          enum: [asc, desc]
+ *          description: Orden ascendente o descencente (valores posibles 'asc', 'desc'). 
+ *          example: desc  
+ *
+ */

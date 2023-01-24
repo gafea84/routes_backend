@@ -1,0 +1,49 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Conversaciones
+ *     description: "Peticiones relacionadas con las conversaciones (conjuntos de mensajes) que se intercambian alumnos y profesores."
+ * /api/private/conversaciones/delete/{conversacionId}:
+ *   delete:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Conversaciones
+ *     description: Marca como borrada la conversación cuyo id va en la petición, para el usuario que viene en el token. El usuario tiene que ser un interlocutor de la conversación.
+ *     parameters:
+ *        - in: path
+ *          name: conversacionId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador de la conversación que se va a marcar como borrada.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: El identificador de la conversación es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       404:
+ *         description: El usuario o el mensaje no existen. O el mensaje no tiene ese usuario como autor o destinatario.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ */

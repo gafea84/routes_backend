@@ -1,0 +1,62 @@
+/**
+ * @openapi
+ *
+ * /api/public/usuarios/newpassword:
+ *   post:
+ *     tags:
+ *       - Usuarios
+ *     description: Petición para enviar un correo electrónico a un usuario que ha olvidado su contraseña, y así generar una nueva clave.
+ *     requestBody:
+ *       description: Email del usuario que ha olvidado su contraseña.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/forgottenPasswordRequest'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       401:
+ *         description: No hay ningún usario con ese email.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *       503:
+ *         description: No está configurado el envío de correos electrónicos en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ *components:
+ *  schemas:
+ *    forgottenPasswordRequest:
+ *      title: ForgottenPasswordRequest
+ *      description: Datos para hacer login
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del usuario que olvidó su clave.
+ *          example: admin@gmail.com 
+ */

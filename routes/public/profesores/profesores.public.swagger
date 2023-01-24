@@ -1,0 +1,390 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Profesores
+ *     description: "Peticiones relacionadas con profesores"
+ *
+ * /api/public/profesores/register:
+ *   post:
+ *     tags:
+ *       - Profesores
+ *     description: Hace el registro del profesor con los datos recibidos.
+ *     requestBody:
+ *       description: Datos para dar de alta al alumno.
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/altaProfesor'
+ *     responses:
+ *       200:
+ *         description: Datos con los que se ha dado de alta el profesor.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/profesorResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ * /api/public/profesores/getSearch:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Profesores
+ *     description: Recupera una lista de profesores. Si no viene con token o no es válido, no devuelve el teléfono y el email de los profesores. Si viene con token válido, sí.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOrderByFieldsProfesoresPublic'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchProfesoresResultPublic'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/public/profesores/opiniones/get:
+ *   post:
+ *     tags:
+ *       - Opiniones
+ *     description: Recupera una lista de opiniones sobre un profesor.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOpinionesRequest'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchOpinionesResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components:
+ *  schemas:
+ *    altaProfesor:
+ *      title: AltaProfesor
+ *      description: Datos para dar de alta al profesor
+ *      type: object
+ *      properties:
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del profesor
+ *          example: Martín Mata Cabello
+ *        userName:
+ *          type: string
+ *          description: Nombre del profesor en la aplicación
+ *          example: mmata
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del profesor
+ *          example: mmata@gmail.com
+ *        password:
+ *          type: string
+ *          description: Clave de acceso del profesor
+ *          example: 123456 
+ *        descripcion:
+ *          type: string
+ *          description: Texto más largo para que el profesor se venda
+ *          example: Excelentes resultados, todos mis alumnos pasan con nota
+ *        precioHora:
+ *          type: decimal
+ *          description: Precio por hora de la clase
+ *          example: 12.50
+ *        experiencia:
+ *          type: int
+ *          description: Años de experiencia del profesor (entre 0 y 99)
+ *          example: 12
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de profesor
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de profesor
+ *          example: 12.4878015
+ *        telefono:
+ *          type: string
+ *          description: Teléfono del profesor
+ *          example: 555555555
+ *        ramaId:
+ *          type: int
+ *          description: Identificador de la rama de conocimiento en la que quiere estar el profesor.
+ *          example: 2  
+ *        imagen:
+ *          type: string
+ *          format: binary
+ *          required: false
+ *    profesorResponse:
+ *      title: ProfesorResponse
+ *      description: Datos de un alumno
+ *      type: object
+ *      properties:
+ *        usuarioId:
+ *          type: int
+ *          description: Número de usuario asignado al profesor
+ *          example: 45
+ *        id:
+ *          type: int
+ *          description: Número de profesor asignado
+ *          example: 12
+ *        rolId:
+ *          type: int
+ *          description: Identificador del rol del usuario
+ *          example: 2
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del profesor
+ *          example: Martín Mata Cabello
+ *        userName:
+ *          type: string
+ *          description: Nombre del profesor en la aplicación
+ *          example: mmata
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del profesor
+ *          example: mmata@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del profesor
+ *          example: 874.gif
+ *        descripción:
+ *          type: string
+ *          description: Texto más largo para que el profesor se venda
+ *          example: Excelentes resultados, todos mis alumnos pasan con nota
+ *        experiencia:
+ *          type: int
+ *          description: Años de experiencia del profesor (entre 0 y 99)
+ *          example: 12
+ *        precioHora:
+ *          type: string
+ *          description: Precio por hora del profesor
+ *          example: "15.50"
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de profesor
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de profesor
+ *          example: 12.4878015
+ *        telefono:
+ *          type: string
+ *          description: Teléfono del profesor
+ *          example: 555555555
+ *        validado:
+ *          type: integer
+ *          description: Será 0 si el profesor todavía no ha sido validado por administrador, 1 en caso contrario
+ *          example: 0
+ *        ramaId:
+ *          type: int
+ *          description: Identificador de la rama de conocimiento asignada al profesor.
+ *          example: 2
+ *        nombreRama:
+ *          type: string
+ *          description: Nombre de la rama de conocimiento asignada al profesor.
+ *          example: Matemáticas
+ *    searchOrderByFieldsProfesoresPublic:
+ *      title: SearchOrderByFieldsProfesoresPublic
+ *      description: Criterios para filtrar (se aplica un and si hay más de uno) y ordenar los resultados de la búsqueda.
+ *      type: object
+ *      properties:
+ *        searchConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/searchCondition'
+ *          description: Condiciones de búsqueda
+ *        orderByConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/orderByCondition'
+ *          description: Criterios de ordenación (se hay más de uno, se aplican por el orden indicado).
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de la persona que hace la búsqueda
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de persona que hace la búsqueda
+ *          example: 12.4878015
+ *        maximaDistancia:
+ *          type: number
+ *          description: Distancia máxima permitida para un profesor en el resultado (expresada en kilómetros).
+ *          example: 100
+ *    searchProfesoresResultPublic:
+ *      title: SearchProfesoresResultPublic
+ *      description: Resultado de una consulta de profesores desde la parte pública
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con los profesores recuperados
+ *          items:
+ *            $ref: '#/components/schemas/profesorResponseSearchPublic' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ *    profesorResponseSearchPublic:
+ *      title: ProfesorResponseSearchPublic
+ *      description: Datos del profesor resultado de una búsqueda desde la parte pública (el telefono y el email solo aparecen si la petición llegó con un token válido).
+ *      type: object
+ *      properties:
+ *        usuarioId:
+ *          type: int
+ *          description: Número de usuario asignado al profesor
+ *          example: 45
+ *        id:
+ *          type: int
+ *          description: Número de profesor asignado
+ *          example: 12
+ *        rolId:
+ *          type: int
+ *          description: Identificador del rol del usuario
+ *          example: 2
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del profesor
+ *          example: Martín Mata Cabello
+ *        userName:
+ *          type: string
+ *          description: Nombre del profesor en la aplicación
+ *          example: mmata
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del profesor
+ *          example: mmata@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del profesor
+ *          example: 78.jpg
+ *        descripción:
+ *          type: string
+ *          description: Texto más largo para que el profesor se venda
+ *          example: Excelentes resultados, todos mis alumnos pasan con nota
+ *        experiencia:
+ *          type: int
+ *          description: Años de experiencia del profesor (entre 0 y 99)
+ *          example: 12
+ *        precioHora:
+ *          type: string
+ *          description: Precio por hora del profesor
+ *          example: "15.50"
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de profesor
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de profesor
+ *          example: 12.4878015
+ *        telefono:
+ *          type: string
+ *          description: Teléfono del profesor
+ *          example: 555555555
+ *        validado:
+ *          type: integer
+ *          description: Será 0 si el profesor todavía no ha sido validado por administrador, 1 en caso contrario
+ *          example: 0
+ *        ramaId:
+ *          type: int
+ *          description: Identificador de la rama de conocimiento asignada al profesor.
+ *          example: 2
+ *        nombreRama:
+ *          type: string
+ *          description: Nombre de la rama de conocimiento asignada al profesor.
+ *          example: Matemáticas
+ *        distancia:
+ *          type: number
+ *          description: Distancia del profesor a la localización indicada en la petición.
+ *          example: 0
+ *    searchOpinionesRequest:
+ *      title: SearchOpinionesRequest
+ *      description: Criterios para filtrar (se aplica un and si hay más de uno) y ordenar los resultados de la búsqueda de opiniones de un profesor.
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: int
+ *          description: Identificador del profesor del que vamos a recuperar opiniones.
+ *          example: 7
+ *        searchConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/searchCondition'
+ *          description: Condiciones de búsqueda
+ *        orderByConditions:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/orderByCondition'
+ *          description: Criterios de ordenación (se hay más de uno, se aplican por el orden indicado).
+ *    searchOpinionesResponse:
+ *      title: SearchOpinionesResponse
+ *      description: Opiniones de un profesor.
+ *      type: object
+ *      properties:
+ *        puntuacion:
+ *          type: int
+ *          description: Puntuación de la opinión.
+ *          example: 4
+ *        comentario:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/searchCondition'
+ *          description: Condiciones de búsqueda
+ *        fechaPuntuacion:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/orderByCondition'
+ *          description: Criterios de ordenación (se hay más de uno, se aplican por el orden indicado).
+ */

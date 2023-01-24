@@ -1,0 +1,72 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Ramas
+ *     description: Peticiones relacionadas con las ramas de conocimiento
+ *
+ * /api/public/ramas:
+ *   get:
+ *     tags:
+ *       - Ramas
+ *     description: Devuelve todas las ramas de conocimiento, o una "página" de ramas (si se especifican los parámetros page y limit).
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     responses:
+ *       200:
+ *         description: El JWT y los datos del usuario logeado.
+ *         content: 
+ *           application/json: 
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ramaResult' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components:
+ *  parameters:
+ *    page:
+ *      name: page
+ *      in: query
+ *      description: "**Número de página**. *Ejemplo: 2*. Si queremos recuperar solo un parte de las ramas, podemos usar este parámetro junto con limit para recuperar las ramas de manera paginada."
+ *      schema:
+ *        type: integer
+ *    limit:
+ *      name: limit
+ *      in: query
+ *      description: "**Número de ramas por página**. *Ejemplo: 5*. Si queremos recuperar solo un parte de las ramas, podemos usar este parámetro junto con page para recuperar las ramas de manera paginada."
+ *      schema:
+ *        type: integer 
+ *  schemas:
+ *    rama:
+ *      title: Rama
+ *      description: Datos de una rma de conocimiento
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *          description: Identificador de la rama de conocimiento
+ *          example: 1
+ *        nombre:
+ *          type: string
+ *          description: Nombre de la rama de conocimiento
+ *          example: Matemáticas
+ *    ramaResult:
+ *      title: RamaResult
+ *      description: Resultado de una consulta de ramas
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con las ramas recuperadas
+ *          items:
+ *            $ref: '#/components/schemas/rama' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ */

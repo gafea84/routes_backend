@@ -1,0 +1,77 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Login
+ *     description: "Peticiones de login al API"
+ *
+ * /api/public/login:
+ *   post:
+ *     tags:
+ *       - Login
+ *     description: Hace el login con el usuario del email y password recibido. Devuelve el JWT que hay que usar en las peticiones a la parte privada, y los datos del usuario logeado.
+ *     requestBody:
+ *       description: Datos para hacer login
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/loginRequest'
+ *     responses:
+ *       200:
+ *         description: El JWT y los datos del usuario logeado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/loginResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       401:
+ *         description: El email y/o la contraseña con incorrectos.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components:
+ *  schemas:
+ *    loginRequest:
+ *      title: LoginRequest
+ *      description: Datos para hacer login
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *          description: Correo electrónico con el que se quiere hacer login
+ *          example: admin@gmail.com
+ *        password:
+ *          type: string
+ *          description: Clave con la que se registró el usuario
+ *          example: 123456
+ *    loginResponse:
+ *      title: LoginAlumnoResponse
+ *      description: Datos devueltos al hacer login (JWT y un objeto alumno)
+ *      required: [ result ]
+ *      type: object
+ *      properties:
+ *        token:
+ *          type: string
+ *          description: JWT para las siguientes peticiones
+ *          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwicm9sZSI6ImFkbWluaXN0cmFkb3IiLCJleHBpcmF0aW9uX2RhdGUiOjE2Njg0MDg0NzgsImlhdCI6MTY2ODM5MDQ3OH0.0g_5ANiw3Xg7jsefRm903wmwk4yKdyqMICZ8EecAcSA
+ *        alumno:
+ *          $ref: '#/components/schemas/alumnoResponse'
+ *        profesor:
+ *          $ref: '#/components/schemas/profesorResponse'
+ *        administrador:
+ *          $ref: '#/components/schemas/administradorResponse'
+ */

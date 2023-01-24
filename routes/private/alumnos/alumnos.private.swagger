@@ -1,0 +1,189 @@
+/**
+ * @openapi
+ *
+ * /api/private/alumnos/update: 
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Alumnos
+ *     description: Cambia datos de configuración del alumno cuyo token de autorización va en la cabecera.
+ *     requestBody:
+ *       description: Nuevos datos de configuración del alumno.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/actualizacionAlumno'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/alumnoResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'  
+ * /api/private/alumnos/delete/{alumnoId}:
+ *   delete:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Alumnos
+ *     description: Hace el borrado lógico del alumno cuyo id va en la petición. En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: alumnoId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del alumno a borrar.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe ningún alumno con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/alumnos/undelete/{alumnoId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Alumnos
+ *     description: Reactiva un alumno borrado previamente, cuyo id va en la petición. En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: alumnoId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del alumno a reactivar.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe ningún alumno con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/alumnos/getSearch:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Alumnos
+ *     description: Recupera una lista de alumnos según los criterios especificados (opcionales), con el orden indicadado (opcional) y paginado (también es opcional). Si el token es de un administrador, recupera los alumnos especificados en los criterios de búsqueda. Si el token es de un profesor, recupera sus alumnos que no esté borrados, y aque además cumplan los criterios de búsqueda.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOrderByFields'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchAlumnosResult'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components: 
+ *  schemas:
+ *    newPasswordRequest:
+ *      title: NewPasswordRequest
+ *      description: Nuevo password para un usuario
+ *      type: object
+ *      properties:
+ *        password:
+ *          type: string
+ *          description: Valor del password
+ *          example: 123456
+ *    actualizacionAlumno:
+ *      title: ActualizacionAlumno
+ *      description: Nuevos datos del alumno
+ *      type: object
+ *      properties:
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del alumno
+ *          example: Mario Rodríguez Artalejo
+ *        userName:
+ *          type: string
+ *          description: Nombre del alumno en la aplicación
+ *          example: mRodriguez
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del alumno
+ *          example: mRodriguez@gmail.com
+ *    searchAlumnosResult:
+ *      title: SearchAlumnosResult
+ *      description: Resultado de una consulta de alumnos
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con los alumnos recuperados
+ *          items:
+ *            $ref: '#/components/schemas/alumnoResponse' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ */

@@ -1,0 +1,51 @@
+/**
+ * @openapi
+ *
+ *components:
+ *  securitySchemes:
+ *    Authorization:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *      description: Debe introducir el token que devuelve la petición de login del rol (administrador, profesor, alumno) adecuado.
+ *  schemas:
+ *    successResponse:
+ *      title: SuccessRespones
+ *      description: Indica si la operación se hizo con éxito
+ *      type: object
+ *      properties:
+ *        success:
+ *          type: boolean
+ *          description: Es true si la operación fue bien
+ *          example: true
+ *    error:
+ *      title: Error
+ *      description: Error producido al tratar una petición
+ *      type: object
+ *      properties:
+ *        errorMessage:
+ *          type: string
+ *          description: Descripción del error que se ha producido
+ *          example: "El usuario se ha borrado"
+ *    errorValidation:
+ *      title: Error validación
+ *      description: Error detectado al validar algún campo de la petición
+ *      type: object
+ *      properties:
+ *        value:
+ *          type: string
+ *          description: Valor enviado en el campo/parámetro
+ *          example: "mfriasmar@gmail"
+ *        msg:
+ *          type: string
+ *          description: El campo email no es un correo electrónico válido
+ *          example: "mfriasmar@gmail"
+ *        param:
+ *          type: string
+ *          description: Nombre del campo/parámetro con el error
+ *          example: "email"
+ *        location: 
+ *          type: string
+ *          description: Lugar dónde se encuentra el parámetro
+ *          example: "body"
+ */

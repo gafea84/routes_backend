@@ -1,0 +1,104 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Alumnos
+ *     description: "Peticiones relacionadas con alumnos"
+ *
+ * /api/public/alumnos/register:
+ *   post:
+ *     tags:
+ *       - Alumnos
+ *     description: Hace el registro del alumno con los datos recibidos.
+ *     requestBody:
+ *       description: Datos para dar de alta al alumno.
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/altaAlumno'
+ *     responses:
+ *       200:
+ *         description: Datos con los que se ha dado de alta el alumno.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/alumnoResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'  
+ *components:
+ *  schemas:
+ *    altaAlumno:
+ *      title: AltaAlumno
+ *      description: Datos para dar de alta al alumno
+ *      type: object
+ *      properties:
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del alumno
+ *          example: Mario Rodríguez Artalejo
+ *        userName:
+ *          type: string
+ *          description: Nombre del alumno en la aplicación
+ *          example: mRodriguez
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del alumno
+ *          example: mRodriguez@gmail.com
+ *        password:
+ *          type: string
+ *          description: Clave de acceso del alumno
+ *          example: 123456 
+ *        imagen:
+ *          type: string
+ *          format: binary
+ *          required: false
+ *    alumnoResponse:
+ *      title: Alumno
+ *      description: Datos de un alumno
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *          description: Identificador del alumno
+ *          example: 1
+ *        usuarioId:
+ *          type: number
+ *          description: Identificador de usuario asignada al alumno
+ *          example: 4
+ *        roleId:
+ *          type: number
+ *          description: Identificador del rol de usuario del alumno
+ *          example: 3
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del alumno
+ *          example: Mario Rodríguez Artalejo
+ *        userName:
+ *          type: string
+ *          description: Nombre del alumno en la aplicación
+ *          example: mRodriguez
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del alumno
+ *          example: mRodriguez@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del alumno
+ *          example: null
+ *        borrado:
+ *          type: number
+ *          description: Indica si el alumno se ha borrado (borrado lógico)
+ *          example: 1
+ */

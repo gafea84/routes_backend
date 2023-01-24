@@ -1,0 +1,212 @@
+/**
+ * @openapi
+ * 
+ * /api/private/profesores/validate/{profesorId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Profesores
+ *     description: Hace la validación de un profesor. En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: profesorId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del profesor a validar.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe ningún profesor con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ * /api/private/profesores/lock/{profesorId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Profesores
+ *     description: Bloquea a un profesor (pasa a estar sin validar otra vez). En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: profesorId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del profesor a bloquear.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe ningún profesor con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ * /api/private/profesores/update: 
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Profesores
+ *     description: Cambia datos de configuración del profesor cuyo id va en el token de autorización de la cabecera.
+ *     requestBody:
+ *       description: Nuevos datos de configuraicón del profesor.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/actualizacionProfesor'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/profesorResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'   
+ * /api/private/profesores/getSearch:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Profesores
+ *     description: Recupera una lista de profesores según los criterios especificados (opcionales), con el orden indicadado (opcional) y paginado (también es opcional). Si el token es de un administrador, recupera los profesores especificados en los criterios de búsqueda. Si el token es de un alumno, recupera sus profesores que estén activos, y aque además cumplan los criterios de búsqueda.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOrderByFields'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchProfesoresResult'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components: 
+ *  schemas:
+ *    actualizacionProfesor:
+ *      title: ActualizacionProfesor
+ *      description: Nuevos datos del profesor
+ *      type: object
+ *      properties:
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del profesor
+ *          example: Martín Mata Cabello
+ *        userName:
+ *          type: string
+ *          description: Nombre del profesor en la aplicación
+ *          example: mmata
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del profesor
+ *          example: mmata@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del profesor
+ *          example: 76.gif
+ *        descripcion:
+ *          type: string
+ *          description: Texto más largo para que el profesor se venda
+ *          example: Excelentes resultados, todos mis alumnos pasan con nota
+ *        precioHora:
+ *          type: decimal
+ *          description: Precio por hora de la clase
+ *          example: 12.50
+ *        experiencia:
+ *          type: int
+ *          description: Años de experiencia del profesor (entre 0 y 99)
+ *          example: 12
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de profesor
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de profesor
+ *          example: 12.4878015
+ *        telefono:
+ *          type: string
+ *          description: Teléfono del profesor
+ *          example: 555555555
+ *        ramaId:
+ *          type: int
+ *          description: Identificador de la rama de conocimiento a la que quiere pertenecer el profesor.
+ *          example: 2
+ *    searchProfesoresResult:
+ *      title: SearchProfesoresResult
+ *      description: Resultado de una consulta de profesores
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con los profesores recuperados
+ *          items:
+ *            $ref: '#/components/schemas/profesorResponse' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ */

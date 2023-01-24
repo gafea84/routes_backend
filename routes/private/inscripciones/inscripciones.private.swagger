@@ -1,0 +1,399 @@
+/**
+ * @openapi
+ * 
+ * tags:
+ *   - name: Inscripciones
+ *     description: "Peticiones relacionadas con inscripciones"
+ *
+ * /api/private/inscripciones/signup/{profesorId}:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Inscripciones
+ *     description: Hace la inscripción el alumno cuyo id va en el token con el profesor cuyo id va en la petición. En la cabecera deberá ir el token de un alumno.
+ *     parameters:
+ *        - in: path
+ *          name: profesorId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del profesor que se va inscribir.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe ningún profesor con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/inscripciones/accept/{inscripcionId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Inscripciones
+ *     description: El profesor cuyo id va en el token acepta la inscripción que viene en el parámetro de la petición. En la cabecera deberá ir el token de un profesor.
+ *     parameters:
+ *        - in: path
+ *          name: inscripcionId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador de la inscripción que se va a aceptar.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       401:
+ *         description: La inscripción pertenece a otro profesor.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       404:
+ *         description: No existe ninguna inscripción con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/inscripciones/opinion:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Inscripciones
+ *     description: El alumno cuyo id va en el token, puntúa al profesor en la inscripción cuyo id va en el cuerpo de la petición. En la cabecera deberá ir el token de un alumno (la inscripción debe ser suya).
+ *     requestBody:
+ *       description: Nueva clave del usuario.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/opinion'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       401:
+ *         description: La inscripción pertenece a otro alumno.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       404:
+ *         description: No existe ninguna inscripción con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ * /api/private/inscripciones/alumnos/getSearch:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Inscripciones
+ *     description: Recupera una lista de inscripciones del alumno del token.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOrderByFields'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchInscripcionesAlumnoResult'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/inscripciones/profesores/getSearch:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Inscripciones
+ *     description: Recupera una lista de inscripciones al profesor del token.
+ *     parameters:
+ *       - $ref: '#/components/parameters/page'
+ *       - $ref: '#/components/parameters/limit'
+ *     requestBody:
+ *       description: Campos para restringir la búsqueda y definir un orden.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/searchOrderByFields'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/searchInscripcionesAProfesorResult'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components:
+ *  schemas:
+ *    opinion:
+ *      title: Opinion
+ *      description: Datos de la opinión (puntuación) de un alumno a un profesor en una inscripción.
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: int
+ *          description: Identificador de la inscripción en la que se va a opinar.
+ *          example: 1
+ *        puntuacion:
+ *          type: int
+ *          description: Puntos que se le asigna al profesor (de 1 a 5 estrellas).
+ *          example: 1
+ *        comentario:
+ *          type: string
+ *          description: Comentario de la opinión
+ *          example: Muy contento, repetiría
+ *    searchInscripcionesAlumnoResult:
+ *      title: SearchInscripcionesAlumnoResult
+ *      description: Resultado de una consulta de inscripciones de un alumno
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con los inscripciones recuperadas
+ *          items:
+ *            $ref: '#/components/schemas/inscripcionDeAlumnoResponse' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ *    inscripcionDeAlumnoResponse:
+ *      title: InscripcionDeAlumnoResponse
+ *      description: Datos de inscripción de un alumno
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: int
+ *          description: Identificador de la inscripción.
+ *          example: 2
+ *        estado:
+ *          type: int
+ *          description: 0 inscripción en espera, 1 inscripción aceptada
+ *          example: 0
+ *        puntuacion:
+ *          type: int
+ *          description: Puntuación dada al profesor en esa inscripción.
+ *          example: 3
+ *        comentario:
+ *          type: string
+ *          description: Comentario del alumno al dar la puntuación.
+ *          example: Explica muy bien
+ *        fechaPuntuacion:
+ *          type: string
+ *          description: Fecha en la que se hizo la puntuación.
+ *          example: 2022/11/19
+ *        alumnosId:
+ *          type: int
+ *          description: Identificador el alumno.
+ *          example: 3
+ *        profesoresId:
+ *          type: int
+ *          description: Identificador del profesor.
+ *          example: 7
+ *        rolId:
+ *          type: int
+ *          description: Identificador del rol del profesor
+ *          example: 2
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del profesor
+ *          example: Martín Mata Cabello
+ *        userName:
+ *          type: string
+ *          description: Nombre del profesor en la aplicación
+ *          example: mmata
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del profesor
+ *          example: mmata@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: imagen del profesor
+ *          example: 34.png
+ *        descripción:
+ *          type: string
+ *          description: Texto más largo para que el profesor se venda
+ *          example: Excelentes resultados, todos mis alumnos pasan con nota
+ *        experiencia:
+ *          type: int
+ *          description: Años de experiencia del profesor (entre 0 y 99)
+ *          example: 12
+ *        precioHora:
+ *          type: string
+ *          description: Precio por hora del profesor
+ *          example: "15.50"
+ *        latitud:
+ *          type: number
+ *          description: Latitud de la localización de profesor
+ *          example: 51.0754321
+ *        longitud:
+ *          type: number
+ *          description: Longitud de la localización de profesor
+ *          example: 12.4878015
+ *        telefono:
+ *          type: string
+ *          description: Teléfono del profesor
+ *          example: 555555555
+ *        validado:
+ *          type: integer
+ *          description: Será 0 si el profesor todavía no ha sido validado por administrador, 1 en caso contrario
+ *          example: 0
+ *        ramaId:
+ *          type: int
+ *          description: Identificador de la rama de conocimiento asignada al profesor.
+ *          example: 2
+ *        nombreRama:
+ *          type: string
+ *          description: Nombre de la rama de conocimiento asignada al profesor.
+ *          example: Matemáticas
+ *    searchInscripcionesAProfesorResult:
+ *      title: searchInscripcionesAProfesorResult
+ *      description: Resultado de una consulta de inscripciones a un profesor
+ *      type: object
+ *      properties:
+ *        rows:
+ *          type: array
+ *          description: Lista con los inscripciones recuperadas
+ *          items:
+ *            $ref: '#/components/schemas/inscripcionAProfesorResponse' 
+ *        pages:
+ *          type: int
+ *          description: Número de páginas según el límite indicado en la petición
+ *          example: 2
+ *    inscripcionAProfesorResponse:
+ *      title: InscripcionAProfesorResponse
+ *      description: Datos de una inscripción a un profesor
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: int
+ *          description: Identificador de la inscripción.
+ *          example: 2
+ *        estado:
+ *          type: int
+ *          description: 0 inscripción en espera, 1 inscripción aceptada
+ *          example: 0
+ *        puntuacion:
+ *          type: int
+ *          description: Puntuación dada al profesor en esa inscripción.
+ *          example: 3
+ *        comentario:
+ *          type: string
+ *          description: Comentario del alumno al dar la puntuación.
+ *          example: Explica muy bien
+ *        fechaPuntuacion:
+ *          type: string
+ *          description: Fecha en la que se hizo la puntuación.
+ *          example: 2022/11/19
+ *        alumnosId:
+ *          type: int
+ *          description: Identificador el alumno.
+ *          example: 3
+ *        profesoresId:
+ *          type: int
+ *          description: Identificador del profesor.
+ *          example: 7
+ *        roleId:
+ *          type: number
+ *          description: Identificador del rol de usuario del profesor
+ *          example: 3
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del alumno
+ *          example: Mario Rodríguez Artalejo
+ *        userName:
+ *          type: string
+ *          description: Nombre del alumno en la aplicación
+ *          example: mRodriguez
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del alumno
+ *          example: mRodriguez@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del alumno
+ *          example: 47.jpg
+ *        borrado:
+ *          type: number
+ *          description: Indica si el alumno se ha borrado (borrado lógico)
+ *          example: 1
+ *
+ */

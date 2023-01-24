@@ -1,0 +1,126 @@
+/**
+ * @openapi
+ *
+ * /api/private/ramas:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Ramas
+ *     description: Da de alta una nueva rama de conocimiento. En la cabecera deberá ir el token de un administrador.
+ *     requestBody:
+ *       description: Datos para dar de alta una nueva rama de conocimiento.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ramaRequest'
+ *     responses:
+ *       200:
+ *         description: Rama que se ha dado de alta.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/rama'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+  * /api/private/ramas/{ramaId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Ramas
+ *     description: Modifica una rama de conocimiento. En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: ramaId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador de la rama a modificar.
+ *     requestBody:
+ *       description: Datos para modificar una rama de conocimiento.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ramaRequest'
+ *     responses:
+ *       200:
+ *         description: Como queda la rama después de la modificación.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/rama'
+ *       404:
+ *         description: No existe la rama con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *   delete:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Ramas
+ *     description: Borra una rama de conocimiento (si no está ligada a algún profesor). En la cabecera deberá ir el token de un administrador.
+ *     parameters:
+ *        - in: path
+ *          name: ramaId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador de la rama a borrar.
+ *     responses:
+ *       200:
+ *         description: Indica que la rama se ha borrado correctamente.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       404:
+ *         description: No existe la rama con el identificador especificado.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       409:
+ *         description: La rama está ligada a algún profesor, no se puede borrar.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *
+ *components:
+ *  schemas:
+ *    ramaRequest:
+ *      title: RamaRequest
+ *      description: Datos para dar de alta/modificar rama de conocimiento
+ *      type: object
+ *      properties:
+ *        nombre:
+ *          type: string
+ *          description: Nombre de la rama de conocimiento
+ *          example: Matemáticas
+ *
+ */

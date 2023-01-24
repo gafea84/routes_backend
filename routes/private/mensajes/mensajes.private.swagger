@@ -1,0 +1,257 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Mensajes
+ *     description: "Peticiones relacionadas con los mensajes que se intercambian alumnos y profesores."
+ * /api/private/mensajes/send:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Mensajes
+ *     description: Envía un mensaje desde el usuario del token al usuario cuyo id de usuario se indica en el cuerpo de la petición.
+ *     requestBody:
+ *       description: Campos para definir el destinatario y el texto del mensaje.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/mensaje'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/sendMensajeResult'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       404:
+ *         description: El autor o el destinatario del mensaje no existen.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/mensajes/setread/{mensajeId}:
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Mensajes
+ *     description: Marca el mensaje cuyo id va en la petición para el usuario que viene en el token. El usuario tiene que ser el destinatario del mensaje.
+ *     parameters:
+ *        - in: path
+ *          name: mensajeId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del mensaje que se va a marcar como leído.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: El identificador del mensaje es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       404:
+ *         description: El destinatario del mensaje o el mensaje no existen. O el mensaje no tiene ese usuario como destinatario.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/mensajes/allmessages:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Mensajes
+ *     description: Recupera todas los mensajes del usuario indicado en el token de la petición. Solo se devolverán los mensajes que se hayan borrado por el usuario.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/allMessagesResponse'
+ *       404:
+ *         description: El usuario no existe.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/mensajes/delete/{mensajeId}:
+ *   delete:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Mensajes
+ *     description: Marca como borrado el mensaje cuyo id va en la petición para el usuario que viene en el token. El usuario tiene que ser el autor o el destinatario del mensaje.
+ *     parameters:
+ *        - in: path
+ *          name: mensajeId
+ *          schema:
+ *            type: integer
+ *          required: true
+ *          description: Identificador del mensaje que se va a marcar como borrado.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: El identificador del mensaje es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation' 
+ *       404:
+ *         description: El usuario o el mensaje no existen. O el mensaje no tiene ese usuario como autor o destinatario.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error' 
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error'
+ *components:
+ *  schemas:
+ *    mensaje:
+ *      title: Mensaje
+ *      description: Datos del mensaje a enviar a otro usuario.
+ *      type: object
+ *      properties:
+ *        idUsuarioDestino:
+ *          type: int
+ *          description: Identificador del usuario al que se manda el mensaje (es el id de usuario, no el de alumno o profesor).
+ *          example: 2
+ *        texto:
+ *          type: string
+ *          description: Texto del mensaje a enviar. (Máximo 200 caracteres).
+ *          example: Hola, ¿qué tal estás?
+ *    sendMensajeResult:
+ *      title: SendMensajeResult
+ *      description: Datos de la respuesta a la petición de envío de un mensaje. autor, destinatario, texto, fechaHora, leido, borradoProfesor, borradoAlumno, conversacionesId
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: int
+ *          description: Identificador del mensaje.
+ *          example: 21
+ *        autor:
+ *          type: int
+ *          description: Identificador de alumno/profesor que manda el mensaje. (No es el id de usuario).
+ *          example: 21
+ *        destinatario:
+ *          type: int
+ *          description: Identificador de alumno/profesor que recibe el mensaje. (No es el id de usuario).
+ *          example: 22
+ *        texto:
+ *          type: string
+ *          description: Texto del mensaje a enviar. (Máximo 200 caracteres).
+ *          example: Hola, ¿qué tal estás?
+ *        fechaHora:
+ *          type: string
+ *          description: Fecha/hora del servidor en la que se hizo el envío del mensaje.
+ *          example: 2022-12-04T22:09:59.000Z
+ *        leido:
+ *          type: int
+ *          description: Indica si el mensaje se ha leído por el destinatario (1) o no (0).
+ *          example: 0
+ *        borradoProfesor:
+ *          type: int
+ *          description: Indica si el mensaje lo ha borrado el profesor (1) o no (0).
+ *          example: 0
+ *        borradoAlumno:
+ *          type: int
+ *          description: Indica si el mensaje lo ha borrado el alumno (1) o no (0).
+ *          example: 0
+ *        conversacionesId:
+ *          type: int
+ *          description: Identificador de la conversación a la que pertenece el mensaje.
+ *          example: 44
+ *    allMessagesResponse:
+ *      title: AllMessagesResponse
+ *      description: Mensajes del usuario. Llegan agrupados por conversación. Las conversaciones se ordenan de más nueva (con el último mensaje de la conversación más reciente) a más antigua. Los mensajes dentro de cada conversación, de más viejo a más nuevo.
+ *      type: object
+ *      properties:
+ *        mensajesNoLeidos:
+ *          type: int
+ *          description: Total de mensajes no leídos por el usuario.
+ *          example: 2
+ *        conversaciones:
+ *          type: array
+ *          description: Lista con las conversaciones del usuario. No se devuelven las borradas por el usuario. Vienen ordenadas de más nueva (con el último mensaje más reciente), a más vieja.
+ *          items:
+ *            $ref: '#/components/schemas/conversacion' 
+ *    conversacion:
+ *      title: Conversacion
+ *      description: Datos de la conversación de un usuario.
+ *      type: object
+ *      properties:
+ *        conversacionesId:
+ *          type: int
+ *          description: Identificador de la conversación.
+ *          example: 22
+ *        mensajesNoLeidos:
+ *          type: int
+ *          description: Número de mensajes no leídos por el usuario dentro de la conversación.
+ *          example: 0
+ *        ultimaFechaHora:
+ *          type: string
+ *          description: Fecha/hora del último mensaje en la conversación.
+ *          example: 2022-12-04T22:09:59.000Z
+ *        interlocutor:
+ *          $ref: '#/components/schemas/alumnoResponse'
+ *        mensajes:
+ *          type: array
+ *          description: Lista de los mensajes dentro de la conversación (no se devuelven los que el usuario haya borrado).
+ *          items:
+ *            $ref: '#/components/schemas/sendMensajeResult' 
+ */

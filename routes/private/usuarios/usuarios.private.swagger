@@ -1,0 +1,130 @@
+ /**
+ * @openapi
+ * tags:
+ *   - name: Usuarios
+ *     description: "Peticiones que afectan a usuarios de cualquier tipo (administradores, profesores o alumnos)."
+ *
+ * /api/private/usuarios/mydata: 
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Usuarios
+ *     description: Recupera los datos del usuario cuyo id va en el token.
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/mydataResponse'
+ *       404:
+ *         description: No se pudo recuperar el usuario del token.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/usuarios/update/password: 
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Usuarios
+ *     description: Cambia la clave de acceso del usuario cuyo token de autorización va en la cabecera.
+ *     requestBody:
+ *       description: Nueva clave del usuario.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/newPasswordRequest'
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: Alguno de los campos enviados es incorrecto.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/errorValidation'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ * /api/private/usuarios/update/imagen: 
+ *   put:
+ *     security:
+ *       - Authorization: []
+ *     tags:
+ *       - Usuarios
+ *     description: Actualiza la imagen del usuario.
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imagen:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Indica que la operación se realizó con éxito.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/successResponse'
+ *       400:
+ *         description: El fichero es demasiado grande, o su extensión no corresponde a una imagen.
+ *         content: 
+ *           application/json: 
+ *             schema: 
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/error'
+ *       500:
+ *         description: Error que se ha producido en el servidor.
+ *         content:
+ *           application/json: 
+ *             schema: 
+ *               $ref: '#/components/schemas/error' 
+ *components: 
+ *  schemas:
+ *    newPasswordRequest:
+ *      title: NewPasswordRequest
+ *      description: Nuevo password para un usuario
+ *      type: object
+ *      properties:
+ *        password:
+ *          type: string
+ *          description: Valor del password
+ *          example: 123456
+ *    mydataResponse:
+ *      title: LoginAlumnoResponse
+ *      description: Datos devueltos al hacer login (JWT y un objeto alumno)
+ *      required: [ result ]
+ *      type: object
+ *      properties:
+ *        alumno:
+ *          $ref: '#/components/schemas/alumnoResponse'
+ *        profesor:
+ *          $ref: '#/components/schemas/profesorResponse'
+ *        administrador:
+ *          $ref: '#/components/schemas/administradorResponse'
+ */

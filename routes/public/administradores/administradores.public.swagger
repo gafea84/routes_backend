@@ -1,0 +1,31 @@
+ /**
+ * @openapi
+ *
+ *components:
+ *  schemas:
+ *    administradorResponse:
+ *      title: Administrador
+ *      description: Datos del administrador
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *          description: Datos del administrador
+ *          example: 1
+ *        nombreCompleto:
+ *          type: string
+ *          description: Nombre completo del administrador
+ *          example: Manuel Sánchez del Vado
+ *        userName:
+ *          type: string
+ *          description: Nombre del administrador en la aplicación
+ *          example: admin
+ *        email:
+ *          type: string
+ *          description: Correo electrónico del administrador
+ *          example: admin@gmail.com
+ *        imagen:
+ *          type: string
+ *          description: Imagen del administrador
+ *          example: 4.png
+ */
